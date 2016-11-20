@@ -1,0 +1,65 @@
+{% extends 'master' %}
+  
+{% block content %}
+      
+    <div class="panel panel-default">
+  <div class="panel-heading">Megrendelés szerkesztése</div>
+  <div class="panel-body">
+
+
+    {% if old('errors') %}
+        <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title">Hibalista</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+            {% for error in old('errors') %}
+            <li>{{ error.message }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        </div>
+    {% endif %}
+    
+
+    <form class="form-horizontal"  action="{{ 'do_order_edit' | route({id: orderId}) }}" method="POST" enctype="multipart/form-data">
+
+        {{ csrfField }}
+
+  <!--      <fieldset> -->
+            </div>
+            <div class="form-group">
+                <label for="status" class="col-lg-2 control-label">Státusz</label>
+                <div class="col-lg-10">
+                    <select class="form-control" id="status" name = "status">
+                        <option>Új</option>
+                        <option>Csomagolás alatt</option>
+                        <option>Átvehető</option>
+                        <option>Lezárt</option>
+                        <option>request</option>
+                        <option>Sikertelen</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+   <!--     </fieldset> -->
+    </form>
+
+
+
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}

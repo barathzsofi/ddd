@@ -1,0 +1,97 @@
+{% extends 'master' %}
+  
+{% block content %}
+      
+    <div class="panel panel-default">
+  <div class="panel-heading">Regisztráció</div>
+  <div class="panel-body">
+
+
+    {% if old('errors') %}
+        <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title">Hibalista</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+      <!--       <li>   {{ old('username') }}</li> -->
+            {% for error in old('errors') %}
+            <li>{{ error.message }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        </div>
+    {% endif %}
+    
+
+    <form class="form-horizontal"  action="{{ 'do_user_create' | route }}" method="POST" enctype="multipart/form-data">
+
+        {{ csrfField }}
+
+  <!--      <fieldset> -->
+            <div class="form-group">
+                <label for="username" class="col-lg-2 control-label">Felhasználónév</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="username" name = "username" placeholder="Felhasználónév"
+                        value="{{ old('username') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="firstname" class="col-lg-2 control-label">Keresztnév</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="firstname" name = "firstname" placeholder="Keresztnév"
+                        value="{{ old('firstname') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="lastname" class="col-lg-2 control-label">Vezetéknév</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="lastname" name = "lastname" placeholder="Vezetéknév"
+                        value="{{ old('lastname') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="col-lg-2 control-label">E-mail cím</label>
+                <div class="col-lg-10">
+                    <input type="email" class="form-control" id="email" name = "email" placeholder="pl@pl.pl"
+                        value="{{ old('email') }}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="col-lg-2 control-label">Jelszó</label>
+                <div class="col-lg-10">
+                    <input type="password" class="form-control" id="password" name = "password" placeholder="Jelszó">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPasswordAgain" class="col-sm-2 control-label">Jelszó ismét</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="inputPasswordAgain" name="password_again" placeholder="Jelszó">
+                </div>
+            </div>
+            
+
+            <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button type="reset" class="btn btn-default">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+   <!--     </fieldset> -->
+    </form>
+
+
+
+
+
+  </div>
+</div>
+
+
+
+{% endblock %}

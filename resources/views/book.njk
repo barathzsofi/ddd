@@ -1,0 +1,76 @@
+{% extends 'master' %}
+  
+{% block content %}
+
+        <ul class="list-group">
+            {% for category in categories %}
+<!--            <a href= "/explore/category/?id={{ category.id }}">  -->
+            <a href= "{{ 'book_category' | route({id: category.id}) }}"> 
+          <li class="list-group-item">
+              
+      <!--      <span class="badge">14</span> -->
+                {{ category.name }}
+          </li>
+          </a>
+          {% endfor %}
+        </ul>
+
+
+<div class="jumbotron book">
+     <!--   <div class="panel panel-primary">
+     -->       <div class="panel-body">
+            <img src="{{ book.cover }}" alt="cover">
+                {% if book.numOfCopies > 0 %}
+                    {% if user %}
+                        <a href="{{ 'basket_put' | route({id: book.id}) }}" class="btn btn-success">Kosárba teszem</a>
+                    {% else %}
+                        <a href="#" class="btn btn-success disabled">Kosárba teszem</a>
+                    {% endif %}
+                {% else %}
+                    <a href="#" class="btn btn-success disabled">Nincs raktáron</a>
+                {% endif %}
+                <h2>{{ book.title }}</h2>
+                
+                <h4>{{ book.writer }}</h4>
+          <!--      <ul class="list-group"> -->
+                
+                        <h5 style = "margin-top: 3%">{{ book.language }}</h5>
+                   
+                        <h5>{{ book.binding }}</h5>
+                        <h5>{{ book.publisher }} {{ book.releaseDate }}</h5>
+                        <h5>{{ book.originalTitle }}</h5>
+                        <h5>{{ book.pageNum }}</h5>
+                        <h5>ISBN: {{ book.isbn }}</h5>
+                        <h5>Ár: {{ book.price }} Ft</h5>
+
+                        <p>
+                            <a href= "{{ book.description }}">
+                                Történet
+                            </a> 
+                        </p>
+                        {%  if book.remark %}
+                            <h5>Megjegyzés: {{ book.remark }} </h5>
+                        {% endif %}
+                        <h5>Műfajok: 
+                        {% for bookCategorie in bookCategories %}
+                            {{ bookCategorie.name }}, 
+                        {% endfor %}
+                        </h5>
+                        {% if user.username == 'admin' %}
+                            <a href="{{ 'book_edit' | route({id: book.id}) }}" class="btn btn-success">Könyv szerkesztése</a>
+                            <div>
+                            <a href="{{ 'book_delete' | route({id: book.id}) }}" class="btn btn-danger">Törlés</a>
+                            </div>
+                        {% endif %}
+  
+            </div>
+                   
+            
+
+    <!--    </div> -->
+</div>
+
+
+
+
+{% endblock %}

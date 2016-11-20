@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head>
+    <style>
+    
+    div.panel.panel-success {
+      margin-left: 6%;
+      float:left;
+      width: 70%;
+    }
+
+    div.panel.panel-default {
+      margin-left: 2%;
+      float:left;
+      width: 75%;
+    }
+
+    ul.list-group {
+      margin-left: 2%;
+      float:left;
+      width: 15%;
+    }
+
+    div.list-group.exp {
+      margin-left: 1%;
+      float:left;
+      width: 48%;
+    }
+
+    .jumbotron {
+        margin-top: -3%;
+        margin-left: 5%;
+        float:left;
+        width: 72%;
+    }
+
+    .jumbotron.profile {
+        margin-top: -3%;
+        margin-left: 5%;
+        float:left;
+        width: 70%;
+    }
+
+    .jumbotron.book {
+      margin-left: 2%;
+      margin-top: -3%;
+      float:left;
+      width: 60%;
+    }
+
+    .panel.panel-default.category {
+      margin-left: 2%;
+      float:left;
+      width: 60%;
+    }
+
+    div.list-group.side {
+      margin-right: 2%;
+      float:right;
+      width: 17%;
+    }
+
+    .list-group-item.side{
+      height: 120px;
+    }
+
+    .list-group-item.popular{
+      width: 18%;
+      margin-left: 1.5%;
+      float: left;
+    }
+
+    .list-group-item.side img{
+      height: 100%;
+      margin-left: -3%;
+      margin-right: 4%;
+        
+    }
+
+    .list-group-item.popular img{
+      width: 100%;
+      margin-top: -2.5%;
+        
+    }
+
+    .list-group-item.book{
+      height: 125px;
+    }
+
+    .list-group-item img{
+        height: 98%;
+        float:left;
+        margin-left: 1%;
+        margin-right: 3%;
+    }
+
+    .panel-body img{
+        width: 30%;
+        height: auto;
+        float:left;
+        margin-left: 3%;
+        margin-right: 6%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+
+    .btn.btn-success{
+        float:right;
+        margin-right: 0%;
+        margin-top: 5%;
+    }
+
+    .btn.btn-danger{
+        float:right;
+        margin-right: 0%;
+        margin-top: 5%;
+    }
+
+    .btn.btn-primary.prof
+    {
+        float:left;
+        margin-right: 0%;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+
+    .navbar-form.navbar-left{
+      margin-left:30%;
+      margin-right:auto;
+    }
+    
+
+    </style>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>BookStore - Homepage</title>
+
+  <link href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/yeti/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <link rel="icon" href="/assets/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <section>
+    <div class="__wrapper">
+      <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">BookStore</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+      <ul class="nav navbar-nav">
+<!--        <li class="active"><a href="/">Főoldal <span class="sr-only">(current)</span></a></li>  -->
+        <li><a href="/">Főoldal</a></li>
+<!--        <li><a href="/explore">Böngésző</a></li> -->
+        <li><a href="/book">Böngésző</a></li>
+
+      </ul>
+ <!--     <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" id="search" name = "search" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+ -->     <ul class="nav navbar-nav navbar-right">
+          <!--<li><a href="/signIn">Bejelentkezés</a></li>
+          <li><a href="/signUp">Regisztráció</a></li>
+          -->
+          
+          {% for nav in navs %}
+            <li><a href="/{{ nav.link }}">{{ nav.sub }}</a></li>
+          {% endfor %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+
+<div class="list-group side">
+  <div class="panel-heading">
+    <h3 class="panel-title">Legújabbak</h3>
+  </div>
+  {% for newBook in newBooks%}
+  <a href="{{ 'book_page' | route({id: newBook.id}) }}" class="list-group-item side">
+    <img src="{{ newBook.cover }}" alt="cover">
+    <h5 class="list-group-item-heading">{{ newBook.title }}</h5>
+    <h6>{{ newBook.writer }}</h6>
+    <h6>{{ newBook.price }} Ft</h6>
+  </a>
+  {% endfor %}
+</div>
+      {% block content %}
+      
+      {% endblock %}
+
+
+
+      {% block footer %}
+        
+      {% endblock %}
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends 'master' %}
+  
+{% block content %}
+
+        <div class="panel panel-success">
+          <div class="panel-heading">Top 5</div>
+            <div class="panel-body">
+              
+                {% for popular in populars %}
+        <!--        <div class="list-group popular">
+            -->    <a href="{{ 'book_page' | route({id: popular.id}) }}" class="list-group-item popular">
+                  <img src="{{ popular.cover }}" alt="cover">
+                  <h5 class="list-group-item-heading">{{ popular.writer }}</h5>
+                  <h4 class="list-group-item-heading">{{ popular.title }}</h4>
+                  <h5>{{ popular.price }} Ft</h5>
+                </a>
+         <!--       </div>
+           -->     {% endfor %}
+            
+          </div>
+        </div>
+
+    
+{% endblock %}

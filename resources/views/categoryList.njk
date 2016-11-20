@@ -1,0 +1,34 @@
+{% extends 'master' %}
+  
+{% block content %}
+
+
+<div class="jumbotron">
+    <h2 style='margin-top: -3px'>Műfajok listája</h2>
+    <a href="/createCategory" class="btn btn-success" style='margin-top: -3px'>Új műfaj</a>
+    <table class="table table-striped table-hover ">
+                <thead>
+                    <tr>
+                    <th>Id</th>
+                    <th>Megnevezése</th>
+                    <th></th>
+                    <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr class="danger">
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td><a href="{{ 'category_edit' | route({id: category.id}) }}">Szerkesztés</a></td>
+                    <td><a href="{{ 'category_delete' | route({id: category.id}) }}">Törlés</a></td>
+                    </tr>
+                    {% endfor %}
+                    
+  
+                </tbody>
+    </table> 
+</div>
+
+
+{% endblock %}

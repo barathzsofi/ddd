@@ -1,0 +1,39 @@
+{% extends 'master' %}
+  
+{% block content %}
+
+<div class="jumbotron profile">
+    <h1>Profil</h1>
+    <div>
+    <a class="btn btn-primary prof" href="{{ 'profile_edit' | route({id: user.id}) }}">Profil szerkesztése</a>
+    </div>
+ <!--   <div>
+    <a class="btn btn-primary prof" href='/basket'">Kosaram</a>
+    </div>
+    <div>
+    <a class="btn btn-primary prof" href='/orderList'>Megrendelések</a>
+    </div> -->
+    <div>
+    <a class="btn btn-primary prof" href='/newRequest'>Special request</a>
+    </div>
+    <br>
+    <br>
+
+<!--    <h4><a href='profile/edit'>Profil szerkesztése</a></h4>
+    -->
+ <!--   <div>
+    <a class="btn btn-success prof" href="{{ 'profile_edit' | route({id: user.id}) }}">Profil szerkesztése</a> 
+    </div> -->
+    <br>
+    <h4>Felhasználónév: {{ user.username }}</h4>
+    <h4>Vezetéknév: {{ user.firstname }}</h4>
+    <h4>Keresztnév: {{ user.lastname }}</h4>
+    <h4>Email cím: {{ user.email }}</h4>
+    <br>
+    
+ <!--   <h4><a href='/basket'>Kosaram</a></h4>
+    <h4><a href='/orderList'>Megrendelések</a></h4>
+    <h4><a href='/newRequest'>Special request</a></h4> -->
+</div>
+
+{% endblock %}
