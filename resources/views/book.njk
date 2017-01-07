@@ -1,18 +1,19 @@
 {% extends 'master' %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/co/4.1.0/index.min.js"></script>
+    <script type ="text/javascript" src="/scripts/delete.js"></script>
+{% endblock %}
   
 {% block content %}
-
         <ul class="list-group">
             {% for category in categories %}
-<!--            <a href= "/explore/category/?id={{ category.id }}">  -->
-            <a href= "{{ 'book_category' | route({id: category.id}) }}"> 
-          <li class="list-group-item">
-              
-      <!--      <span class="badge">14</span> -->
-                {{ category.name }}
-          </li>
-          </a>
-          {% endfor %}
+                <a href= "{{ 'book_category' | route({id: category.id}) }}"> 
+                    <li class="list-group-item">
+                            {{ category.name }}
+                    </li>
+                </a>
+            {% endfor %}
         </ul>
 
 
@@ -29,11 +30,8 @@
                 {% else %}
                     <a href="#" class="btn btn-success disabled">Nincs raktáron</a>
                 {% endif %}
-                <h2>{{ book.title }}</h2>
-                
-                <h4>{{ book.writer }}</h4>
-          <!--      <ul class="list-group"> -->
-                
+                        <h2>{{ book.title }}</h2>                
+                        <h4>{{ book.writer }}</h4>                
                         <h5 style = "margin-top: 3%">{{ book.language }}</h5>
                    
                         <h5>{{ book.binding }}</h5>
@@ -57,13 +55,30 @@
                         {% endfor %}
                         </h5>
                         {% if user.username == 'admin' %}
-                            <a href="{{ 'book_edit' | route({id: book.id}) }}" class="btn btn-success">Könyv szerkesztése</a>
                             <div>
-                            <a href="{{ 'book_delete' | route({id: book.id}) }}" class="btn btn-danger">Törlés</a>
+                                {{ csrfField | safe }}
+                                <span class="help-block"></span>
+                                <input id="bookId" type="hidden" value="{{book.id}}">
+                                <a class="btn btn-success" href="{{ 'book_edit' | route({id: book.id}) }}">Könyv szerkesztése</a>
+                                <a id="btnDelete" class="btn btn-danger btn-delete" href="{{ 'book_delete' | route({id: book.id}) }}">Törlés</a>
+                            </div>
+
+                            <div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                Biztosan törölni szeretnéd?
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-success modal-ok" data-dismiss="modal">OK</button>
+                                <button type="button" class="btn btn-danger modal-cancel" data-dismiss="modal">Mégse</button>
+                                </div>
+                            </div>
                             </div>
                         {% endif %}
   
             </div>
+            
                    
             
 

@@ -1,34 +1,56 @@
 {% extends 'master' %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/co/4.1.0/index.min.js"></script>
+    <script type ="text/javascript" src="/scripts/delete.js"></script>
+{% endblock %}
   
 {% block content %}
 
 
 <div class="jumbotron">
     <table class="table table-striped table-hover ">
+        {{ csrfField | safe }}
+            <span class="help-block"></span>
                 <thead>
                     <tr>
                     <th>Könyv id</th>
                     <th>Író: cím</th>
                     <th>ár</th>
-            <!--        <th>+</th> -->
+                    <th></th>
+                    <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for book in books %}
-                    <tr class="danger" onclick="window.document.location='{{ 'book_page' | route({id: book.id}) }}';">
+<!--                    <tr class="danger" onclick="window.document.location='{{ 'book_page' | route({id: book.id}) }}';">
+    -->                <tr class="danger">
                     
                         <td>{{ book.id }}</td>
                         <td>{{ book.writer }}: {{ book.title }}</td>
                         <td>{{ book.price }} Ft</td>
-           <!--             <td><a href='/book/?id={{ book.id }}'>+</a></td> -->
-<!--                        <td><a href='/deleteFromBasket?id={{ book.id }}'>delete</a></td> -->
-                        <td><a href="{{ 'basket_delete' | route({id: book.id}) }}">delete</a></td>
+                        <td><a href="{{ 'book_page' | route({id: book.id}) }}">Részletek</a></td>
+                        <td><a class="deleteFromBasket" href="{{ 'basket_delete' | route({id: book.id}) }}">delete</a></td>
+                        
+                        <div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        Biztosan törölni szeretnéd?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success modal-ok" data-dismiss="modal">OK</button>
+                                        <button type="button" class="btn btn-danger modal-cancel" data-dismiss="modal">Mégse</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     
                     </tr>
                     {% endfor %}
                 </tbody>
     </table>
-    <a href="/emptyBasket" class="btn btn-info">Kosár ürítése</a>
+    <a  href="/emptyBasket" class="btn btn-info emptyBasket">Kosár ürítése</a>
     <a href="/order" class="btn btn-success">Rendelés leadása</a>
 
 </div>

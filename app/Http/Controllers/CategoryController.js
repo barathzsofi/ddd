@@ -57,7 +57,6 @@ class CategoryController {
         if(url.indexOf("?") > -1){
             const search = request.input('search');
             const books = yield Book.query().whereRaw('title like ? or writer like ?',['%'+search+'%','%'+search+'%']).fetch()
-            //const books = yield Database.table('books').whereRaw('title like ? or writer like ?',['%'+search+'%','%'+search+'%'])
             yield response.sendView('explore', {
                 books: books.toJSON(),
                 categories: categories.toJSON(),
@@ -72,6 +71,15 @@ class CategoryController {
                 navs: navs
             })  
         }
+    }
+
+
+    * ajaxSearch (request, response) {
+
+            const search = request.input('search');
+            var books = yield Book.query().whereRaw('title like ? or writer like ?',['%'+search+'%','%'+search+'%']).fetch()
+            response.ok(books.toJSON())
+
     }
 
 
@@ -225,6 +233,29 @@ class CategoryController {
         }
 
     }
+
+
+    * ajaxDelete(request, response){
+
+        const user = yield request.auth.getUser()
+            if (user && user.username == 'admin') {
+                const categoryId = request.param('id')        
+                const category = yield Category.find(categoryId) 
+
+                if(category){
+                    yield category.delete();
+                    yield Database.table('book_category').where('category_id',categoryId).delete()
+                    response.ok({succes: true})
+                } else {
+                    yield response.forbidden();
+                }
+
+            } else {
+                response.unauthorized('Access denied.')
+            }
+
+
+  }
 
 
 

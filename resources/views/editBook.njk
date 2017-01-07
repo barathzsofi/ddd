@@ -1,4 +1,9 @@
 {% extends 'master' %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+    <script src="/scripts/smart_categories.js"></script>
+{% endblock %}
   
 {% block content %}
       
@@ -23,30 +28,36 @@
     {% endif %}
     
 
-    <form class="form-horizontal"  action="{{ 'do_book_edit' | route({id: book.id}) }}" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal"  action="{{ 'do_book_edit' | route({id: book.id}) }}" method="POST" enctype="multipart/form-data" data-toggle="validator">
 
         {{ csrfField }}
 
   <!--      <fieldset> -->
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="writer" class="col-lg-2 control-label">Író</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="writer" name = "writer"
-                        value="{{ book.writer }}">
+                        value="{{ book.writer }}"  required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="title" class="col-lg-2 control-label">Cím</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="title" name = "title"
-                        value="{{ book.title }}">
+                        value="{{ book.title }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="price" class="col-lg-2 control-label">Ár</label>
                 <div class="col-lg-10">
                     <input type="number" class="form-control" id="price" name = "price"
-                        value="{{ book.price }}">
+                        value="{{ book.price }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="form-group">
@@ -56,11 +67,13 @@
                         value="{{ book.binding }}">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="isbn" class="col-lg-2 control-label">ISBN</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="isbn" name = "isbn"
-                        value="{{ book.isbn }}">
+                        value="{{ book.isbn }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             <div class="form-group">
@@ -98,59 +111,68 @@
                         value="{{ book.pageNum }}">
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="language" class="col-lg-2 control-label">Nyelv</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="language" name = "language"
-                        value="{{ book.language }}">
+                        value="{{ book.language }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="cover" class="col-lg-2 control-label">Borító</label>
                 <div class="col-lg-10">
                     <input type="url" class="form-control" id="cover" name = "cover"
-                        value="{{ book.cover }}">
+                        value="{{ book.cover }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="numOfCopies" class="col-lg-2 control-label">Példányszám</label>
                 <div class="col-lg-10">
                     <input type="number" class="form-control" id="numOfCopies" name = "numOfCopies"
                         value="{{ book.numOfCopies }}">
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
+            
             <div class="form-group">
                 <label for="categories" class="col-lg-2 control-label">Műfajok</label>
-                <div class="col-lg-10">
+                <div class="col-lg-10 category-list">
                     <h5>
                         {% for bookCategorie in bookCategories %}
                             {{ bookCategorie.name }}, 
                         {% endfor %}
-                        </h5>
+                    </h5>
                 </div>
             </div>
             <div class="form-group">
                 <label for="category" class="col-lg-2 control-label">Műfaj hozzáadása</label>
                 <div class="col-lg-10">
                     <select class="form-control" id="category" name = "category">
-                        <option>-</option>
+                        <option class="hide">-</option>
                         {% for category in categories %}
                             <option>{{ category.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
+            {% if bookCategories.length > 0 %}
             <div class="form-group">
                 <label for="categoryDelete" class="col-lg-2 control-label">Műfaj törlése</label>
                 <div class="col-lg-10">
                     <select class="form-control" id="categoryDelete" name = "categoryDelete">
-                        <option>-</option>
-                        {% for category in categories %}
+                        <option class="hide">-</option>
+                        {% for category in bookCategories %}
                             <option>{{ category.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
+            {% endif %}
             <div class="form-group">
                 <label for="remark" class="col-lg-2 control-label">Megjegyzés</label>
                 <div class="col-lg-10">
@@ -162,8 +184,6 @@
                 <div class="col-lg-10 col-lg-offset-2">
                     <button type="reset" class="btn btn-default">Cancel</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
-             <!--       <a href="/deleteBook?id={{ book.id }}" class="btn btn-danger" style="float: left">Könyv törlése</a>
-                -->
                 </div>
             </div>
             

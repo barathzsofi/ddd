@@ -254,6 +254,23 @@ class OrderController {
         
     }
 
+    * ajaxEmptyBasket (request, response) {
+
+        const user = yield request.auth.getUser()
+        if (user) {
+            const bask = yield Database.table('orders').first().where('status','basket').where('user_id',user.id)
+            const basket = yield Order.find(bask.id)
+
+            yield basket.books().detach()
+            //response.redirect('/basket');
+            response.ok({succes: true})
+
+        } else {
+            response.unauthorized('You must login to view your profile')
+        }
+        
+    }
+
     * deleteFromBasket (request, response) {
 
         const user = yield request.auth.getUser()
@@ -438,6 +455,46 @@ class OrderController {
                 response.unauthorized('You must login to view your profile')
             }
         
+        }
+
+        * ajaxDelete(request, response){
+            const user = yield request.auth.getUser()
+            if (user.username == 'admin') {
+
+
+                const orderId = request.param('id')        
+                const order = yield Order.find(orderId) 
+
+                if(order){
+                    yield order.delete();
+                    yield Database.table('book_order').where('order_id',orderId).delete()
+                    //yield response.route('/orderList');
+                    response.ok({succes: true})
+                } else {
+                    yield response.forbidden();
+                }
+
+            } else {
+                response.unauthorized('You must login to view your profile')
+            }
+        }
+
+
+        * ajaxDeleteFromBasket(request, response){
+
+            const user = yield request.auth.getUser()
+            if (user) {
+                const bask = yield Database.table('orders').first().where('status','basket').where('user_id',user.id)
+                const bookId = request.param('id')
+
+                yield Database.table('book_order').first().where('book_id',bookId).where('order_id',bask.id).delete()
+                //response.redirect('/basket');
+                response.ok({succes: true})
+
+            } else {
+                response.unauthorized('You must login to view your profile')
+            }
+
         }
 
 

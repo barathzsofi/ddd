@@ -1,5 +1,10 @@
 {% extends 'master' %}
-  
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/co/4.1.0/index.min.js"></script>
+    <script src="/scripts/delete.js"></script>
+{% endblock %}
+
 {% block content %}
 
 
@@ -16,18 +21,37 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{ csrfField | safe }}
+                            <span class="help-block"></span>
                     {% for category in categories %}
                     <tr class="danger">
-                    <td>{{ category.id }}</td>
-                    <td>{{ category.name }}</td>
-                    <td><a href="{{ 'category_edit' | route({id: category.id}) }}">Szerkesztés</a></td>
-                    <td><a href="{{ 'category_delete' | route({id: category.id}) }}">Törlés</a></td>
+                        <td>{{ category.id }}</td>
+                        <td>{{ category.name }}</td>
+                        <td><a href="{{ 'category_edit' | route({id: category.id}) }}">Szerkesztés</a></td>
+                        <td>
+                            <div>
+                                <input class="categoryId" type="hidden" value="{{ category.id }}">
+                                <a class="categoryDelete" href="{{ 'category_delete' | route({id: category.id}) }}">Törlés</a>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                     
-  
                 </tbody>
     </table> 
+    <div class="modal fade confirm-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    Biztosan törölni szeretnéd?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success modal-ok" data-dismiss="modal">OK</button>
+                    <button type="button" class="btn btn-danger modal-cancel" data-dismiss="modal">Mégse</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

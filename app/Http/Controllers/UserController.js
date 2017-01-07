@@ -50,6 +50,7 @@ class UserController {
     }
 
 
+
     * doLogin (request, response) {
         
         const email = request.input('email')
@@ -66,9 +67,27 @@ class UserController {
 
     }
 
+
+    * ajaxLogin(request, response) {
+
+        const email = request.input('email')
+        const password = request.input('password')
+        try {
+            const login = yield request.auth.attempt(email, password) 
+            if (login) {
+                response.send({ success: true })
+                return
+            }
+        } catch (e) {
+            response.send({ success: false })
+        }
+        
+    }
+
+
     * logout (request, response) {
         yield request.auth.logout()
-        response.redirect('/logIn');
+        response.redirect('/');
     }
 
     * profile (request, response) {
@@ -76,15 +95,12 @@ class UserController {
         const newBooks = yield Database.table('books').where('numOfCopies','>',0).orderBy('id','desc').limit(3);
         const user = yield request.auth.getUser()
         var navs = navigation(user)
-        if (user) {
-            //response.ok(user)
-            
+        if (user) {            
             yield response.sendView('profile', {
                 user: user.toJSON(),
                 newBooks: newBooks,
                 navs: navs
             }) 
-            //return
         } else {
             response.unauthorized('Access denied.')
         }
@@ -136,12 +152,10 @@ class UserController {
         user.email = userData.email
         user.password  = yield Hash.make(userData.password)      
  
-         // TODO: these lines should be executed atomically
         yield user.save()
         yield request.auth.login(user)
  
  
-//        response.redirect('/signIn');
         response.redirect('/');
 
     }

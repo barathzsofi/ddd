@@ -1,4 +1,8 @@
 {% extends 'master' %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+{% endblock %}
   
 {% block content %}
       
@@ -23,55 +27,67 @@
         </div>
     {% endif %}
     
-
-    <form class="form-horizontal"  action="{{ 'do_user_create' | route }}" method="POST" enctype="multipart/form-data">
+    <div class="col-md-8 col-md-offset-2">
+    <form class="form-horizontal" action="{{ 'do_user_create' | route }}" method="POST" enctype="multipart/form-data" data-toggle="validator">
 
         {{ csrfField }}
 
   <!--      <fieldset> -->
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="username" class="col-lg-2 control-label">Felhasználónév</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="username" name = "username" placeholder="Felhasználónév"
-                        value="{{ old('username') }}">
+                        value="{{ old('username') }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="firstname" class="col-lg-2 control-label">Keresztnév</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="firstname" name = "firstname" placeholder="Keresztnév"
-                        value="{{ old('firstname') }}">
+                        value="{{ old('firstname') }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="lastname" class="col-lg-2 control-label">Vezetéknév</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="lastname" name = "lastname" placeholder="Vezetéknév"
-                        value="{{ old('lastname') }}">
+                        value="{{ old('lastname') }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="email" class="col-lg-2 control-label">E-mail cím</label>
                 <div class="col-lg-10">
                     <input type="email" class="form-control" id="email" name = "email" placeholder="pl@pl.pl"
-                        value="{{ old('email') }}">
+                        value="{{ old('email') }}" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="password" class="col-lg-2 control-label">Jelszó</label>
                 <div class="col-lg-10">
-                    <input type="password" class="form-control" id="password" name = "password" placeholder="Jelszó">
+                    <input type="password" data-minlength="3" class="form-control" id="password" name = "password" placeholder="Jelszó" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="inputPasswordAgain" class="col-sm-2 control-label">Jelszó ismét</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="inputPasswordAgain" name="password_again" placeholder="Jelszó">
+                    <input type="password" class="form-control" id="inputPasswordAgain" data-match="#password" name="password_again" placeholder="Jelszó" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
             

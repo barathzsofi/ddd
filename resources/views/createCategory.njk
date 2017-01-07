@@ -1,4 +1,8 @@
 {% extends 'master' %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+{% endblock %}
   
 {% block content %}
 
@@ -33,15 +37,17 @@
     {% endif %}
     
 
-    <form class="form-horizontal"  action="/createCategory" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal" action="/createCategory" method="POST" enctype="multipart/form-data" data-toggle="validator">
 
         {{ csrfField }}
 
   <!--      <fieldset> -->
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label for="name" class="col-lg-2 control-label">Műfaj neve</label>
                 <div class="col-lg-10">
-                    <input type="text" class="form-control" id="name" name = "name">
+                    <input type="text" class="form-control" id="name" name = "name" required>
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 

@@ -1,15 +1,16 @@
 {% extends 'master' %}
+
+{% block scripts %}
+    <script src="/scripts/main.js"></script>
+{% endblock %}
   
 {% block content %}
       
 
         <ul class="list-group">
             {% for category in categories %}
-<!--            <a href= "/explore/category/?id={{ category.id }}">  -->
             <a href= "{{ 'book_category' | route({id: category.id}) }}"> 
-          <li class="list-group-item">
-              
-      <!--      <span class="badge">14</span> -->
+          <li class="list-group-item">              
                 {{ category.name }}
           </li>
           </a>
@@ -17,33 +18,31 @@
         </ul>
 
 <div class="jumbotron book">
-    <form class="navbar-form navbar-left" role="search">
+    <form class="navbar-form navbar-left" role="search" action="/book" method="GET" style="position: relative;">
         {{ csrfField }}
         <div class="form-group">
-          <input type="text" class="form-control" id="search" name = "search" placeholder="Search">
+          <input type="text" class="form-control book-search" id="search" name = "search" placeholder="Search" autocomplete="off">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
+        <div class="list-group book-suggestions suggestions">
+        </div>
       </form>
  <!--       <div class="list-group exp"> -->
             {% for book in books %}
             <div class="list-group exp">
             {% if loop.index%2 == 0 %}
-<!--                <a href="/book/?id={{ book.id }}" class="list-group-item book"> -->
                 <a href="{{ 'book_page' | route({id: book.id}) }}" class="list-group-item book">
                     <img src="{{ book.cover }}" alt="cover">
                     <h5 class="list-group-item-heading">{{ book.writer }}</h5>
                     <h4 class="list-group-item-heading">{{ book.title }}</h4>
-            <!--       <h5 class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</h5>
-            -->       <h5>{{ book.price }} Ft</h5>
+                   <h5>{{ book.price }} Ft</h5>
                 </a>
             {% else %}
-     <!--           <a href="/book/?id={{ book.id }}" class="list-group-item book"> -->
                     <a href="{{ 'book_page' | route({id: book.id}) }}" class="list-group-item book">
                         <img src="{{ book.cover }}" alt="cover">
                         <h5 class="list-group-item-heading">{{ book.writer }}</h5>
                         <h4 class="list-group-item-heading">{{ book.title }}</h4>
-                <!--       <h5 class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</h5>
-                -->       <h5>{{ book.price }} Ft</h5>
+                       <h5>{{ book.price }} Ft</h5>
                     </a>
             {% endif %}
             </div>

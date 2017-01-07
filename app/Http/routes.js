@@ -18,20 +18,15 @@
 const Route = use('Route')
 
 Route.get('/', 'BookController.index')
-//Route.get('/book', 'BookController.book');
 Route.get('/book', 'CategoryController.index').as('book_list');
 Route.get('/book/:id', 'BookController.book').as('book_page');
 Route.get('/bookList', 'BookController.bookList');
-//Route.get('/editBook', 'BookController.editBook').as('book_edit');
-//Route.post('/editBook', 'BookController.doEditBook').as('do_book_edit');
 Route.get('/book/:id/editBook', 'BookController.editBook').as('book_edit');
 Route.post('/book/:id/editBook', 'BookController.doEditBook').as('do_book_edit');
 Route.get('/book/:id/deleteBook', 'BookController.deleteBook').as('book_delete');
 Route.get('/createBook', 'BookController.createBook').as('book_create');
 Route.post('/createBook', 'BookController.doCreateBook').as('bo_book_create');
 
-
-//Route.get('/explore', 'CategoryController.index')
 Route.get('/book/category/:id', 'CategoryController.index').as('book_category')
 Route.get('/categoryList', 'CategoryController.categoryList')
 Route.get('/createCategory', 'CategoryController.createCategory').as('category_create');
@@ -63,3 +58,15 @@ Route.post('/newRequest', 'OrderController.doNewRequest').as('do_request_create'
 Route.get('/editOrder/:id', 'OrderController.editOrder').as('order_edit')
 Route.post('/editOrder/:id', 'OrderController.doEditOrder').as('do_order_edit')
 Route.get('/editOrder/:id/delete', 'OrderController.deleteOrder').as('order_delete')
+
+Route.group('ajax', function () {
+  Route.delete('/book/:id/deleteBook', 'BookController.ajaxDelete').middleware('auth'),
+  Route.delete('/categoryList/delete/:id', 'CategoryController.ajaxDelete').middleware('auth'),
+  Route.delete('/editOrder/:id/delete', 'OrderController.ajaxDelete').middleware('auth'),
+  Route.delete('/deleteFromBasket/:id', 'OrderController.ajaxDeleteFromBasket').middleware('auth')
+  Route.delete('/emptyBasket', 'OrderController.ajaxEmptyBasket').middleware('auth')
+  Route.post('/logIn', 'UserController.ajaxLogin')
+  Route.post('/book/:id/editBook', 'BookController.ajaxEditBook')
+  Route.post('/createBook', 'BookController.ajaxCreateBook')
+  Route.get('/search', 'CategoryController.ajaxSearch')
+}).prefix('/ajax')

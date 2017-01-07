@@ -99,7 +99,6 @@ class BookController {
                 navs: navs,
             })  
         } else {
-            //response.unauthorized('You must login to view your profile')
             response.unauthorized('Access denied.')
         }
     }
@@ -213,6 +212,86 @@ class BookController {
 
     }
 
+    * ajaxEditBook (request, response) {
+        
+        const user = yield request.auth.getUser()
+        if (user && user.username == 'admin') {
+            const bookData = request.all();
+        
+            const validation = yield Validator.validateAll(bookData, {
+                writer: 'required',
+                title: 'required',
+                price: 'required',
+                isbn: 'required',
+                language: 'required',
+                cover: 'required',
+                numOfCopies: 'required',
+            });
+            if (validation.fails()) {
+                yield request
+                .withAll()
+                .andWith({ errors: validation.messages() })
+                .flash()
+                response.send({ success: false })
+                //response.redirect('back')
+                return
+            }
+
+            const bookId = request.param('id')
+
+            yield Database.table('books').where('id',bookId)
+                .update('writer',bookData.writer)
+                .update('title',bookData.title)
+                .update('price',bookData.price)
+                .update('binding',bookData.binding)
+                .update('releaseDate',bookData.releaseDate)
+                .update('publisher',bookData.publisher)
+                .update('originalTitle',bookData.originalTitle)
+                .update('description',bookData.description)
+                .update('pageNum',bookData.pageNum)
+                .update('language',bookData.language)
+                .update('cover',bookData.cover)
+                .update('numOfCopies',bookData.numOfCopies)
+                .update('isbn',bookData.isbn)
+                .update('remark',bookData.remark)
+            
+            var tmp = bookData.category
+            var newCategories = tmp.split(", ")
+            if(bookData.category != '-' && bookData.category != ''){
+                const book = yield Book.find(bookId)
+                for(var i = 0; i < newCategories.length; ++i){
+                    
+                    const cat = yield Database.table('categories').first().where('name',newCategories[i])
+                    //console.log(newCategories[i])
+                    const tmp = yield book.categories().where('category_id',cat.id).fetch()
+                    if(tmp.toJSON().length < 1){
+                        const category = new Category(cat)
+                        yield book.categories().save(category)
+                    }
+
+                }
+                
+            }
+            
+            if(bookData.categoryDelete != '-' && bookData.categoryDelete != undefined && bookData.categoryDelete != ''){
+                var tmp2 = bookData.categoryDelete
+                var deleteCategories = tmp2.split(", ")
+                for(var i = 0; i < deleteCategories.length; ++i){
+                    //console.log(deleteCategories[i])
+                    const cat = yield Database.table('categories').first().where('name',deleteCategories[i])
+                    const torlendo = yield Database.table('book_category').first().where('book_id',bookId).where('category_id',cat.id).delete()
+            
+                }
+            }
+
+            response.send({ success: true })
+        } else {
+            response.unauthorized('Access denied.')
+        }
+
+        
+    }
+
 
 
 
@@ -258,7 +337,6 @@ class BookController {
             yield book.save()
 
             if(bookData.category != '-'){
-                //const book = yield Book.find(bookId)
                 const cat = yield Database.table('categories').first().where('name',bookData.category)
                 const category = new Category(cat)
                 yield book.categories().save(category)
@@ -273,6 +351,64 @@ class BookController {
 
     }
 
+    * ajaxCreateBook (request, response) {
+        const user = yield request.auth.getUser()
+        if(user && user.username == 'admin'){
+            
+            const bookData = request.all();
+            const validation = yield Validator.validateAll(bookData, {
+                writer: 'required',
+                title: 'required',
+                price: 'required',
+                isbn: 'required|unique:books',
+                language: 'required',
+                cover: 'required',
+                numOfCopies: 'required',
+            });
+            if (validation.fails()) {
+                yield request
+                .withAll()
+                .andWith({ errors: validation.messages() })
+                .flash()
+                response.send({ success: false })
+                //response.redirect('back')
+                return
+            }
+
+            var book = new Book()
+            book.writer = bookData.writer
+            book.title = bookData.title
+            book.price = bookData.price
+            book.binding = bookData.binding
+            book.isbn = bookData.isbn
+            book.releaseDate = bookData.releaseDate
+            book.publisher = bookData.publisher
+            book.originalTitle = bookData.originalTitle
+            book.description = bookData.description
+            book.pageNum = bookData.pageNum
+            book.language = bookData.language
+            book.cover = bookData.cover
+            book.numOfCopies = bookData.numOfCopies
+
+            yield book.save()
+
+            var tmp = bookData.category
+            var categories = tmp.split(", ")
+            if(bookData.category != '-' &&  bookData.category != ''){
+                for(var i = 0; i < categories.length; ++i){
+                    const cat = yield Database.table('categories').first().where('name',categories[i])
+                    const category = new Category(cat)
+                    yield book.categories().save(category)
+                }
+            }
+            
+            response.send({ success: true })
+
+        } else {
+            response.unauthorized('Access denied.')
+        }
+    }
+
 
 
     * deleteBook (request, response) {
@@ -282,10 +418,25 @@ class BookController {
         if(user && book && user.username == 'admin'){
             yield book.delete();
             yield Database.table('book_category').where('book_id',bookId).delete()
-            yield response.route('/book');
+            yield response.route('/bookList');
         } else {
             response.unauthorized('Access denied.')
         }
+  }
+
+  * ajaxDelete(request, response){
+        const bookId = request.param('id')
+        const book = yield Book.find(bookId)
+        const user = yield request.auth.getUser()
+        if(user && book && user.username == 'admin'){
+            yield book.delete();
+            yield Database.table('book_category').where('book_id',bookId).delete()
+            //yield response.route('/bookList');
+            response.ok({succes: true})
+        } else {
+            response.unauthorized('Access denied.')
+        }
+
   }
 
 }
